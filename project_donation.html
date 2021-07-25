@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+  <title>Donation Ranking</title>
+  <meta charset="utf-8">
+  <style>
+  body{
+    background-color: #ece;
+    font-family: Verdana, Geneva, Arial, sans-serif;
+  }
+  h1{
+    text-align: center;
+    border: 1px solid #ECEC8;
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 32px;
+    padding: 12px;
+    border-radius: 24px;
+    background-color: rgb(79,54,174);
+    color: white;
+  }
+  table{
+    border-top: 2px solid rgb(30,52,99);
+    width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  th{
+    border-bottom: 2px solid rgb(30,52,99);
+    padding:10px;
+    font-size: 23px;
+    text-align: center;
+    background-color: #a091e2;
+  }
+  td{
+    border-bottom: 1px solid rgb(30,52,99);
+    background-color: #ECEC84;
+    padding: 10px;
+    font-size: 20px;
+    text-align: center;
+  }
+  tr{
+    height: 45px;
+  }
+  div{
+    font-size: 20px;
+    text-align: center;
+  }
+  #nameid, #moneyid{
+    width:200px;
+    height:25px;
+    border-radius: 10px;
+  }
+  #button1, #button2{
+    width:60px;
+    height:22px;
+    border-radius: 6px;
+    background-color: rgb(246,107,84);
+    color: white;
+  }
+  </style>
+  <script>
+    var names=[];
+    var moneys=[];
+    function system(){
+      var name=document.getElementById('nameid').value;
+      var money=document.getElementById('moneyid').value;
+      money=parseFloat(money);
+      var i;
+      var check=0;
+      var length=names.length;
+      for (i=0;i<length;i++){
+        if(names[i]==name){
+          moneys[i]=moneys[i]+money;
+          check=1;
+          key=moneys[i];
+          break;
+        }
+      }
+      if(check==0){
+        names[length]=name;
+        moneys[length]=money;
+        key=money;
+      }
+      for (i = 0; i < names.length; i++) {
+	       for (j = 0; j < (names.length - 1) - i; j++) {
+		         if (moneys[j] < moneys[j + 1]) {
+			            temp = moneys[j];
+			            moneys[j] = moneys[j + 1];
+			            moneys[j + 1] = temp;
+                  temp = names[j];
+                  names[j]=names[j+1];
+                  names[j+1]=temp;
+		         }
+	        }
+      }
+      for(i=0;i<names.length;i++){
+        var table = document.getElementById('ranking');
+        const newRow = table.insertRow();
+        const newCell1 = newRow.insertCell(0);
+        const newCell2 = newRow.insertCell(1);
+        const newCell3 = newRow.insertCell(2);
+        newCell1.innerText = i+1;
+        newCell2.innerText = names[i];
+        newCell3.innerText = moneys[i];
+      }
+    }
+    function erase(){
+      document.getElementById('nameid').value='';
+      document.getElementById('moneyid').value='';
+    }
+    function deleteall(){
+      var table = document.getElementById('ranking');
+      var totalRowCnt=table.rows.length;
+      for(var i=1;i<totalRowCnt;i++){
+        table.deleteRow(1);
+      }
+    }
+    function re(){
+      names=[];
+      moneys=[];
+    }
+  </script>
+</head>
+<body>
+  <h1>Donation Ranking</h1>
+  <table id='ranking'>
+    <th>Rank</th>
+    <th>Name</th>
+    <th>Donation</th>
+  </table>
+  <br><br>
+  <div>
+  Name: <input id="nameid" type="text">
+  Donation: <input id="moneyid" type="text">
+  <input id="button1" type="button" value="enter" onclick="
+    deleteall(); system(); erase();
+  ">
+  <input id="button2" type="button" value="reset" onclick="
+    deleteall(); re(); erase();
+  ">
+  </div>
+</body>
+</html>
